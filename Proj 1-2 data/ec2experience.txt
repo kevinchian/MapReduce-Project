@@ -1,0 +1,82 @@
+Test Results: 
+
+(freedom, 0) on the 2005 dataset with combiner off:
+
+Total time taken (sum of first and second job): 12 min 23 sec
+The number of mappers used for job 1: 210
+The number of mappers used for job 2: 32
+The number of reducers used for job 1: 32
+The number of reducers used for job 2: 1
+The size of the input (S3N_BYTES_READ): 13,988,469,183
+
+(freedom, 0) on the 2005 dataset with combiner on:
+
+Total time taken (sum of first and second job): 6 min 11 sec
+The number of mappers used for job 1: 210
+The number of mappers used for job 2: 32
+The number of reducers used for job 1: 32
+The number of reducers used for job 2: 1
+The size of the input (S3N_BYTES_READ): 13,988,463,804
+
+(capital, 0) on the 2006 dataset with combiner on with 5 nodes:
+
+Total time taken (sum of first and second job): 14 min 12 sec
+The number of mappers used for job 1: 316
+The number of mappers used for job 2: 32
+The number of reducers used for job 1: 32
+The number of reducers used for job 2: 1
+The size of the input (S3N_BYTES_READ): 19,139,802,178
+
+(capital, 0) on the 2006 dataset with combiner on with 9 nodes:
+
+Total time taken (sum of first and second job): 8 min 18 sec
+The number of mappers used for job 1: 316
+The number of mappers used for job 2: 32
+The number of reducers used for job 1: 32
+The number of reducers used for job 2: 1
+The size of the input (S3N_BYTES_READ): 19,139,839,185
+
+(landmark, 1) on the 2006 dataset with combiner on:
+
+Total time taken (sum of first and second job): 9 min 19 sec
+The number of mappers used for job 1: 316
+The number of mappers used for job 2: 32
+The number of reducers used for job 1: 32 
+The number of reducers used for job 2: 1
+The size of the input (S3N_BYTES_READ): 19,141,797,507
+
+(monument, 2) on the 2006 dataset with combiner on:
+
+Total time taken (sum of first and second job): 9 min 9 sec
+The number of mappers used for job 1: 316
+The number of mappers used for job 2: 32
+The number of reducers used for job 1: 32
+The number of reducers used for job 2: 1
+The size of the input (S3N_BYTES_READ): 19,141,782,746
+
+1. How long did each of the six runs take? How many mappers and how many reducers did you use? Answer above.
+
+2. For the two runs with (freedom, 0), how much faster did your code run on the 5 workers with the combiner turned on than with the combiner turned off? Express your answer as a percentage.
+
+(12 min 23 sec - 6 min 11 sec) / (6 min 11 sec) = 1.0027 * 100% = 100.26%
+
+3. For the runs on the 2006 dataset, what was the median processing rate per GB (= 2^30 bytes) of input for the tests using 5 workers? Using 9 workers?
+
+5 workers processing rate: 19,139,802,178 bytes = 17.8253 GB; 17.8253GB/852sec = .0209 GB/sec
+5 workers median processing rate: .0209 GB/sec
+9 workers processing rates:
+19,139,839,185 bytes = 17.8253 GB/498 sec = .0357 GB/sec
+19,141,797,507 bytes = 17.8272 GB/559 sec = .0319 GB/sec
+19,141,782,746 bytes = 17.8272 GB/549 sec = .0325 GB/sec
+9 workers median processing rate: .0334 GB/sec
+
+4. What was the percent speedup of running (capital, 0) with 9 workers over 5 workers? What is the maximum possible speedup, assuming your code is fully parallelizable? How well, in your opinion, does Hadoop parallelize your code? Justify your answer in 1-2 sentences.
+
+(852 sec - 498 sec)/498 sec = .7108 = 71.08% speedup. The maximum possible speed up should increase linearly with the number of workers due to strong scaling. This is because the more workers the more parallel processes can be done at any given time on the same set of data, and since each additional worker takes the same amount of work off of the other machines, the runtime should speedup linearly. The maximum possible speedup should be (9-5)/5 = .8 = 80% speedup. Hadoop parallelizes my code rather well, since my processing rate is almost up to the 80% maximum speedup; and the small time variance could be due to outside factors including how many people are using ec-2 servers when I ran the two separate tasks. 
+
+5. For a single run on the 2006 dataset, what was the price per GB processed on with 5 workers? With 9 workers? (Recall that an extra-large instance costs $0.58 per hour, rounded up to the nearest hour.) 
+
+5 nodes: 17.8253 GB processed in 14 min 12 sec. 5*$0.58 = $2.90. $2.90 / 17.8253 GB = $0.16 / GB
+9 nodes: Average GB processed: 17.8266 GB in less than an hour. 9 * $0.58 = $5.22. $5.22 / 17.8266 GB = $0.29 / GB
+
+6. How much total money did you use to complete this project? $16.24
